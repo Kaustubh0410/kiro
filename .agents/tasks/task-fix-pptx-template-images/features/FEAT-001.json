@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Download relevant free images from the internet and rewrite create_presentation.py to match the JTP template format with real embedded images. This is one unified feature covering: (1) downloading 8-10 food/sustainability images, (2) rewriting the script with proper JTP template formatting (section labels, branding, footer, author), and (3) embedding the downloaded images into the slides.",
+  "status": "in_progress",
+  "steps": [
+    "Install the requests library: pip install requests",
+    "Create /projects/sandbox/kiro/images/ directory",
+    "Download 8-10 relevant high-quality images using Python urllib or requests from Unsplash (use their photo URLs with size params like ?w=1200&q=80). Suggested images to download: (1) food sustainability hero image for title slide, (2) food waste/overflowing bins for crisis slide, (3) forgotten food in fridge for problem slide 1, (4) food donation/sharing for solution/problem slide 2, (5) cooking with ingredients for problem/solution slide 3, (6) food app/technology interface for features slide, (7) clean tech diagram or app screen for architecture slide, (8) happy community/people sharing food for impact slide, (9) growth/future/green sprout for roadmap slide, (10) fresh vegetables/sustainability for closing slide. Save each as /projects/sandbox/kiro/images/01_title.jpg through 10_closing.jpg. Use actual working Unsplash URLs like https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=1200&q=80 (food sustainability). If any URL fails, try alternatives or use Pexels.",
+    "Rewrite /projects/sandbox/kiro/create_presentation.py completely. The new script must: (a) Keep 16:9 format (13.333 x 7.5 inches). (b) Use the JTP template format on EVERY slide with: a section label in UPPERCASE at top-left (e.g. 'THE CRISIS', 'THE CHALLENGE', 'THE SOLUTION', 'FEATURES', 'ARCHITECTURE', 'PROJECTED IMPACT', 'THE FUTURE') in small bold text, 'JTP Co., Ltd.' branding visible, copyright footer '(c) JTP Co., Ltd. All Rights Reserved.' at bottom center on every slide. (c) Title slide (slide 1): Add 'JTP Co., Ltd.' at top, author 'Kaustubh Londhe', title 'Smart Food Management', subtitle 'Intelligent Platform for Zero Food Waste', stat '1.3 Billion Tonnes of food wasted annually', embed title image as a large background or half-slide visual. (d) Slide 2 (THE CRISIS): Section label 'THE CRISIS', title 'Every Day, Food Goes to Waste', 3 stat cards (1.3B tonnes, $1 Trillion, 828M hungry), embed food waste image. (e) Slides 3-5 (problem+solution pairs): Keep the story-driven format. Each slide has section label 'THE CHALLENGE' or 'THE SOLUTION', problem on left, solution on right, with relevant images embedded in or behind the cards. (f) Slide 6 (FEATURES): Section label 'FEATURES', 'Six Superpowers in One Platform', 6 feature cards, embed food tech image. (g) Slide 7 (ARCHITECTURE): Section label 'ARCHITECTURE', 'How It Works For You', 4 user-benefit layers (no tech jargon), embed clean tech/UI image. (h) Slide 8 (PROJECTED IMPACT): Section label 'PROJECTED IMPACT', 3 impact metrics, embed community/happy people image. (i) Slide 9 (THE FUTURE): Section label 'THE FUTURE', 4-phase roadmap, embed growth image. (j) Slide 10 (closing): 'Smart Food Management' title, tagline, JTP Co., Ltd. branding prominent, embed fresh food image.",
+    "For image embedding, use slide.shapes.add_picture(image_path, left, top, width, height) from python-pptx. Position images as large visuals (either as slide backgrounds behind semi-transparent overlays, or as half-slide featured images on the right side of content).",
+    "Run the script: python3 /projects/sandbox/kiro/create_presentation.py and verify it generates SmartFoodManagement.pptx with 10 slides",
+    "Verify images are embedded by checking that each slide has picture shapes: python3 -c \"from pptx import Presentation; from pptx.shapes.picture import Picture; p = Presentation('/projects/sandbox/kiro/SmartFoodManagement.pptx'); pics = sum(1 for s in p.slides for sh in s.shapes if isinstance(sh, Picture)); print(f'Total pictures embedded: {pics}'); assert pics >= 8, f'Expected at least 8 pictures, got {pics}'\""
+  ],
+  "acceptance_criteria": [
+    "images/ directory exists with at least 8 downloaded image files",
+    "create_presentation.py runs without errors and produces SmartFoodManagement.pptx",
+    "The .pptx has exactly 10 slides",
+    "Every slide has the copyright footer '(c) JTP Co., Ltd. All Rights Reserved.'",
+    "Every slide (except maybe title) has a CAPS section label at top-left matching JTP format",
+    "Title slide shows 'JTP Co., Ltd.' branding and 'Kaustubh Londhe' as author",
+    "At least 8 slides have real embedded Picture shapes (not emoji text)",
+    "Slides 3, 4, 5 maintain the problem+solution pair layout",
+    "Slide 7 (architecture) uses user-benefit language with zero technology names",
+    "Images are properly sized and positioned within slides"
+  ],
+  "verification": [
+    "python3 /projects/sandbox/kiro/create_presentation.py",
+    "python3 -c \"from pptx import Presentation; p = Presentation('/projects/sandbox/kiro/SmartFoodManagement.pptx'); assert len(p.slides) == 10; print(f'OK: {len(p.slides)} slides')\"",
+    "python3 -c \"from pptx import Presentation; from pptx.shapes.picture import Picture; p = Presentation('/projects/sandbox/kiro/SmartFoodManagement.pptx'); pics = sum(1 for s in p.slides for sh in s.shapes if isinstance(sh, Picture)); print(f'Pictures embedded: {pics}'); assert pics >= 8\"",
+    "ls /projects/sandbox/kiro/images/ | wc -l"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
