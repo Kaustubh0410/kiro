@@ -9,6 +9,8 @@ from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
+from pptx.oxml.ns import qn
+from lxml import etree
 
 # =============================================================================
 # Global Constants
@@ -54,6 +56,7 @@ def add_background_image(slide, image_filename):
             image_path, Inches(0), Inches(0), SLIDE_WIDTH, SLIDE_HEIGHT
         )
         return pic
+    print(f"WARNING: Image not found: {image_path}")
     return None
 
 
@@ -66,8 +69,6 @@ def add_dark_overlay(slide, opacity_level="heavy"):
     overlay.fill.fore_color.rgb = OVERLAY_COLOR
     overlay.line.fill.background()
     # Set transparency via the XML element
-    from pptx.oxml.ns import qn
-    from lxml import etree
     # Access the spPr/solidFill element in the shape XML
     sp_elem = overlay._element
     sp_pr = sp_elem.find(qn('p:spPr'))
@@ -88,23 +89,6 @@ def add_dark_overlay(slide, opacity_level="heavy"):
             else:
                 alpha_elem.set('val', '50000')  # 50% opacity
     return overlay
-
-
-def add_side_image(slide, image_filename, left=None, top=None, width=None, height=None):
-    """Add an image positioned on the right side of the slide."""
-    image_path = os.path.join(IMAGES_DIR, image_filename)
-    if not os.path.exists(image_path):
-        return None
-    if left is None:
-        left = Inches(7.5)
-    if top is None:
-        top = Inches(1.0)
-    if width is None:
-        width = Inches(5.5)
-    if height is None:
-        height = Inches(5.5)
-    pic = slide.shapes.add_picture(image_path, left, top, width, height)
-    return pic
 
 
 def add_footer(slide):
